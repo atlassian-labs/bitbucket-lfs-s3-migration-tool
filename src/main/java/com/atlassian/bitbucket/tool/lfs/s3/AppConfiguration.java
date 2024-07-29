@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.atlassian.bitbucket.tool.s3lfs;
+package com.atlassian.bitbucket.tool.lfs.s3;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,21 +21,28 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-public class Configuration {
+/**
+ * Configuration for the migration app that contains details of the S3 bucket and Bitbucket home.
+ */
+public class AppConfiguration {
 
     private static final String PROP_BITBUCKET_HOME = "bitbucket.home";
     private static final String PROP_S3_BUCKET = "s3.bucket";
     private static final String PROP_S3_REGION = "s3.region";
     private static final String PROP_S3_ACCESS_KEY = "s3.access-key";
     private static final String PROP_S3_SECRET_KET = "s3.secret-key";
+    private static final String PROP_S3_ENDPOINT_OVERRIDE = "s3.endpoint-override";
+    private static final String PROP_REVERSE_MIGRATION = "reverse-migration";
 
     private final String homeDir;
     private final String bucket;
     private final String region;
     private final String accessKey;
     private final String secretKey;
+    private final String endpointOverride;
+    private final boolean reverseMigration;
 
-    public Configuration(String configFile) throws IOException {
+    public AppConfiguration(String configFile) throws IOException {
         try (InputStream inputStream = Files.newInputStream(Paths.get(configFile))) {
             Properties props = new Properties();
             props.load(inputStream);
@@ -45,6 +52,8 @@ public class Configuration {
             region = props.getProperty(PROP_S3_REGION);
             accessKey = props.getProperty(PROP_S3_ACCESS_KEY);
             secretKey = props.getProperty(PROP_S3_SECRET_KET);
+            endpointOverride = props.getProperty(PROP_S3_ENDPOINT_OVERRIDE, null);
+            reverseMigration = Boolean.parseBoolean(props.getProperty(PROP_REVERSE_MIGRATION, String.valueOf(Boolean.FALSE)));
         }
     }
 
@@ -66,5 +75,17 @@ public class Configuration {
 
     public String getS3SecretKey() {
         return secretKey;
+    }
+
+    public String getS3EndpointOverride() {
+        return endpointOverride;
+    }
+
+    public boolean isEndpointOverride() {
+        return endpointOverride != null;
+    }
+
+    public boolean isReverseMigration() {
+        return reverseMigration;
     }
 }
