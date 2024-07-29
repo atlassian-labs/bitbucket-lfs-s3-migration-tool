@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <awssdk.version>2.20.101</awssdk.version>
+        <awssdk.version>2.25.28</awssdk.version>
         <commons-coded.version>1.16.0</commons-coded.version>
         <slf4j.version>1.7.36</slf4j.version>
     </properties>
