@@ -1,20 +1,18 @@
-# Bitbucket Data Center Git LFS S3 Store Migration Tool
+# Bitbucket Data Center - Git LFS S3 Store Migration Tool
 
-## About
+A tool for migrating LFS objects between a Bitbucket Data Center's shared-home filesystem and AWS S3.
 
-This tool assists in migrating LFS objects that reside on an NFS server of a Bitbucket Data Center instance to S3. 
-The LFS objects are uploaded to the provided S3 bucket and no objects are deleted from the NFS server. The same applies 
-for reversing a migration; the LFS objects are downloaded from the S3 bucket back to the NFS server and no objects are deleted 
-from the S3 bucket.
+[![Atlassian license](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
 ## Building
 
 ```
-git clone https://...
+git clone https://github.com/atlassian-labs/bitbucket-lfs-s3-migration-tool
 cd bitbucket-lfs-s3-migration-tool
 mvn package
 ```
-You can find the generated jar under the `/target` directory.
+You can find the generated JAR file under the `/target` directory. This JAR will need to be installed to one
+of the Bitbucket Data Center nodes to run.
 
 ## Running
 
@@ -22,13 +20,13 @@ Example `config.properties` file:
 
 ```
 bitbucket.home=/var/atlassian/application-data/bitbucket
-s3.bucket=bitbucket-git-lfs
+s3.bucket=bitbucket-object-store
 s3.region=ap-southeast-2
 s3.access-key=<access key>
 s3.secret-key=<access key>
 s3.endpoint-override=<url> # optional; when omitted the S3 endpoint will be configured automatically
 ```
-You can then run the migration tool using the following command:
+You can then run the migration tool directly from the node using the following command:
 
 ```
 java -jar bitbucket-lfs-s3-migration-tool-1.0.0-SNAPSHOT-jar-with-dependencies.jar config.properties
@@ -36,9 +34,22 @@ java -jar bitbucket-lfs-s3-migration-tool-1.0.0-SNAPSHOT-jar-with-dependencies.j
 
 ### Reverse migration
 
-In order to perform a migration from the S3 LFS object store back to the filesystem, simply add the following property 
-to your configuration properties file:
+In order to perform a migration from the S3 LFS object store back to the shared-home filesystem, simply add the
+following property to the configuration properties file:
 
 ```
 reverse-migration=true # optional; when omitted defaults to false
 ```
+
+## Contributions
+
+Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## License
+
+Copyright (c) 2024 Atlassian US., Inc.
+Apache 2.0 licensed, see [LICENSE](LICENSE) file.
+
+<br/>
+
+[![With â¤ï¸ from Atlassian](https://raw.githubusercontent.com/atlassian-internal/oss-assets/master/banner-cheers.png)](https://www.atlassian.com)
