@@ -72,7 +72,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.atlassian.bitbucket.tool.s3lfs.MigrationApp</mainClass>
+                            <mainClass>com.atlassian.bitbucket.tool.lfs.s3.MigrationApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
