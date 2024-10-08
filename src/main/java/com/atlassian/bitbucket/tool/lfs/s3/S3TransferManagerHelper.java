@@ -82,10 +82,10 @@ public class S3TransferManagerHelper {
         listObjects(BUCKET_KEY_PREFIX + "/" + hierarchy).stream()
                 .flatMap(resp -> resp.contents().stream())
                 .forEach(object -> {
-                    String key = object.key();
-                    String oid = key.split("/")[2];
-                    String oidLevel1 = oid.substring(0, 2);
-                    String oidLevel2 = oid.substring(2);
+                    String key = object.key(); // Of the form git-lfs/<hierarchy>/<sha256[0:1]>/sha256[2:63]
+                    String[] keySplit = key.split("/");
+                    String oidLevel1 = keySplit[2];
+                    String oidLevel2 = keySplit[3];
 
                     Path oidLevel1Dir = hierarchyDir.resolve(oidLevel1);
                     if (!Files.exists(oidLevel1Dir) || !Files.isDirectory(oidLevel1Dir)) {
@@ -136,7 +136,7 @@ public class S3TransferManagerHelper {
      * @return list of hierarchies for LFS objects in the bucket.
      */
     protected List<String> getHierarchies() {
-        return listObjects(BUCKET_KEY_PREFIX).stream()
+        return listHierarchies().stream()
                 .flatMap(resp -> resp.commonPrefixes().stream())
                 .map(prefix -> prefix.prefix().split("/")[1])
                 .collect(Collectors.toList());
@@ -154,7 +154,23 @@ public class S3TransferManagerHelper {
         ListObjectsV2Request request = ListObjectsV2Request.builder()
                 .bucket(bucket)
                 .prefix(prefix)
-                .delimiter(delimiter)
+                .build();
+
+        try {
+            return client.listObjectsV2Paginator(request);
+        } catch (S3Exception e) {
+            System.err.println("  Error: Failure when reading from bucket: " + e.getMessage());
+            System.exit(1);
+        }
+
+        return null;
+    }
+
+    protected ListObjectsV2Iterable listHierarchies() {
+        ListObjectsV2Request request = ListObjectsV2Request.builder()
+                .bucket(bucket)
+                .prefix(BUCKET_KEY_PREFIX + "/")
+                .delimiter("/")
                 .build();
 
         try {
@@ -283,6 +299,6 @@ public class S3TransferManagerHelper {
      * Constructs a key for an S3 object from the given hierarchy and object ID.
      */
     private static String toKey(String hierarchy, String oid) {
-        return BUCKET_KEY_PREFIX + "/" + hierarchy + "/" + oid;
+        return BUCKET_KEY_PREFIX + "/" + hierarchy + "/" + oid.substring(0, 2) + "/" + oid.substring(2);
     }
 }

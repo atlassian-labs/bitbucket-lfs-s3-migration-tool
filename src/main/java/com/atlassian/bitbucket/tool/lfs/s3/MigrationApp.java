@@ -53,7 +53,7 @@ public class MigrationApp {
             System.out.printf("%nBeginning migration of embedded LFS object store to S3...%n");
             overallSummary = s3TransferManager.upload(lfsDir);
         } else {
-            System.out.printf("%Beginning migration of S3 LFS objects to filesystem...%n");
+            System.out.printf("%nBeginning migration of S3 LFS objects to filesystem...%n");
             overallSummary = s3TransferManager.download(lfsDir);
         }
 
