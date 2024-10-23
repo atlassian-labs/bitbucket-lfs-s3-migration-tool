@@ -10,7 +10,7 @@
 
     <groupId>com.atlassian.bitbucket.tool</groupId>
     <artifactId>bitbucket-lfs-s3-migration-tool</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>bitbucket-lfs-s3-migration-tool</name>
     <url>https://github.com/atlassian-labs/bitbucket-s3-lfs-migration-tool</url>
@@ -23,7 +23,7 @@
 		<connection>scm:git:ssh://git@github.com/atlassian-labs/bitbucket-s3-lfs-migration-tool.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/atlassian-labs/bitbucket-s3-lfs-migration-tool.git</developerConnection>
 		<url>https://github.com/atlassian-labs/bitbucket-s3-lfs-migration-tool</url>
-		<tag>HEAD</tag>
+		<tag>bitbucket-lfs-s3-migration-tool-1.0.0</tag>
 	</scm>
 
     <properties>
