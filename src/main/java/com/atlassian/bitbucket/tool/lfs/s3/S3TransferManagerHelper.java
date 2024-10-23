@@ -73,7 +73,7 @@ public class S3TransferManagerHelper {
     /**
      * Downloads all LFS objects under the given hierarchy.
      * <p>
-     * LFS objects are stored with structure <hierarchy dir>/<oid[0:2]>/<oid[2:63]> where OID is
+     * LFS objects are stored with structure {@code <hierarchy dir>/<oid[0:2]>/<oid[2:63]>} where OID is
      * the SHA256 checksum of the object.
      */
     protected TransferSummary downloadHierarchy(String hierarchy, Path hierarchyDir) {
@@ -235,7 +235,7 @@ public class S3TransferManagerHelper {
     /**
      * Uploads all LFS objects under the given hierarchy.
      * <p>
-     * LFS objects are stored with structure <hierarchy dir>/<oid[0:2]>/<oid[2:63]> where OID is
+     * LFS objects are stored with structure {@code <hierarchy dir>/<oid[0:2]>/<oid[2:63]>} where OID is
      * the SHA256 checksum of the object.
      */
     protected TransferSummary uploadHierarchy(Path hierarchyDir) {
