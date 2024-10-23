@@ -14,6 +14,12 @@ mvn package
 You can find the generated JAR file under the `/target` directory. This JAR will need to be installed to one
 of the Bitbucket Data Center nodes to run.
 
+To run the integration tests Docker must be running as the test starts a LocalStack container. The tests can be
+run with:
+```
+mvn verify
+```
+
 ## Running
 
 Example `config.properties` file:
@@ -23,7 +29,7 @@ bitbucket.home=/var/atlassian/application-data/bitbucket
 s3.bucket=bitbucket-object-store
 s3.region=ap-southeast-2
 s3.access-key=<access key>
-s3.secret-key=<access key>
+s3.secret-key=<secret key>
 s3.endpoint-override=<url> # optional; when omitted the S3 endpoint will be configured automatically
 ```
 You can then run the migration tool directly from the node using the following command:
@@ -49,15 +55,15 @@ copied data.
 
 ### Shared-home filesystem layout
 
-Bitbucket Data Center stores LFS objects in the shared-home filesystem in the directory `$BITBUCKET_HOME/shared/data/git-lfs`.
-Within this directory objects are stored using the file path `<hierarchyId>/<sha256[0:1]>/sha256[2:63]`. The `hierarchyId`
-is a 20 character hexadecimal string that uniquely identifies all repositories related by forking. Git LFS objects are
-shared between forks to support "cheap" forking. The SHA-256 hash mentioned above is the LFS "object identifier", often
-called the OID. It is the SHA-256 hash of the LFS object content. Putting that all together, the full path to an LFS
-object in the shared home, given the hierarchyId `1234567890abcdef1234` and OID of
-`0ba904eae8773b70c75333db4de2f3ac45a8ad4ddba1b242f0b3cfc199391dd8`, would be:
+Bitbucket Data Center stores LFS objects in the shared-home filesystem in the directory
+`$BITBUCKET_HOME/shared/data/git-lfs/storage`. Within this directory objects are stored using the file path
+`<hierarchyId>/<sha256[0:1]>/sha256[2:63]`. The `hierarchyId` is a 20 character hexadecimal string that uniquely
+identifies all repositories related by forking. Git LFS objects are  shared between forks to support "cheap" forking.
+The SHA-256 hash mentioned above is the LFS "object identifier", often called the OID. It is the SHA-256 hash of the
+LFS object content. Putting that all together, the full path to an LFS object in the shared home, given the hierarchyId
+`1234567890abcdef1234` and OID of `0ba904eae8773b70c75333db4de2f3ac45a8ad4ddba1b242f0b3cfc199391dd8`, would be:
 ```
-$BITBUCKET_HOME/shared/data/git-lfs/1234567890abcdef1234/0b/a904eae8773b70c75333db4de2f3ac45a8ad4ddba1b242f0b3cfc199391dd8
+$BITBUCKET_HOME/shared/data/git-lfs/storage/1234567890abcdef1234/0b/a904eae8773b70c75333db4de2f3ac45a8ad4ddba1b242f0b3cfc199391dd8
 ```
 
 ### S3 bucket layout
@@ -73,7 +79,7 @@ completely different.
 So putting that all together, the migration tool will iterate over all LFS objects in the shared-home filesystem (for
 example) an object stored at the following filesystem path:
 ```
-$BITBUCKET_HOME/shared/data/git-lfs/1234567890abcdef1234/0b/a904eae8773b70c75333db4de2f3ac45a8ad4ddba1b242f0b3cfc199391dd8
+$BITBUCKET_HOME/shared/data/git-lfs/storage/1234567890abcdef1234/0b/a904eae8773b70c75333db4de2f3ac45a8ad4ddba1b242f0b3cfc199391dd8
 ```
 would be migrated to S3 with an object key:
 ```

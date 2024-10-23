@@ -17,6 +17,18 @@ public class TransferSummary {
         this.successful += summary.successful;
     }
 
+    public long getFailed() {
+        return failed;
+    }
+
+    public long getSkipped() {
+        return skipped;
+    }
+
+    public long getSuccessful() {
+        return successful;
+    }
+
     public void incrementFailed() {
         failed++;
     }
